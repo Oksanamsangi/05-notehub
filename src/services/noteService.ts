@@ -24,7 +24,7 @@ export const fetchNotes = async (
   });
   const response = await axios.get<NotesHttpResponse>(`${URL}?${parameters}`, {
     headers: {
-      Authorization: import.meta.env.VITE_TMDB_TOKEN,
+      Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
     },
   });
   return response.data;
@@ -33,7 +33,7 @@ export const fetchNotes = async (
 export const createNote = async (newNote: NewNote): Promise<Note> => {
   const response = await axios.post<Note>(`${URL}`, newNote, {
     headers: {
-      Authorization: import.meta.env.VITE_TMDB_TOKEN,
+      Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
     },
   });
   return response.data;
@@ -42,7 +42,7 @@ export const createNote = async (newNote: NewNote): Promise<Note> => {
 export const deleteNote = async (id: number): Promise<Note> => {
   const response = await axios.delete<Note>(`${URL}/${id}`, {
     headers: {
-      Authorization: import.meta.env.VITE_TMDB_TOKEN,
+      Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
     },
   });
   return response.data;

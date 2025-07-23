@@ -3,9 +3,10 @@ import NoteForm from '../NoteForm/NoteForm'
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 
-interface NoteModalProps {
-    onClose: () => void;
-}
+type NoteModalProps = {
+  onClose: () => void;
+  children: React.ReactNode; // Ось сюди додай це
+};
 
 export default function NoteModal({onClose}: NoteModalProps) {
     const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
