@@ -3,8 +3,6 @@ import NoteList from '../NoteList/NoteList';
 import NoteModal from '../NoteModal/NoteModal';
 import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox';
-import Loader from '../Loader/Loader';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -22,7 +20,7 @@ export default function App() {
 
   const [debouncedQuery] = useDebounce(query, 300);
 
-  const { data, isSuccess, isLoading, isError } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: ['notes', debouncedQuery, page],
     queryFn: () => fetchNotes(debouncedQuery, page),
     placeholderData: keepPreviousData,
@@ -48,8 +46,6 @@ export default function App() {
       </header>
       {isSuccess && data.notes.length > 0 && <NoteList notes={data.notes} />}
       {isCreateNote && <NoteModal onClose={handleClose} />}
-      {isLoading && <Loader />}
-      {isError && <ErrorMessage />}
     </div>
   );
 }
