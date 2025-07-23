@@ -6,7 +6,7 @@ import SearchBox from '../SearchBox/SearchBox';
 import NoteForm from '../NoteForm/NoteForm';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {  useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 
 export default function App() {
@@ -21,11 +21,11 @@ export default function App() {
 
   const [debouncedQuery] = useDebounce(query, 300);
 
-  const { data, isSuccess } = useQuery({
-    queryKey: ['notes', debouncedQuery, page],
-    queryFn: () => fetchNotes(debouncedQuery, page),
-    placeholderData: keepPreviousData,
-  });
+const { data, isSuccess } = useQuery({
+  queryKey: ['notes', debouncedQuery, page],
+  queryFn: () => fetchNotes(debouncedQuery, page),
+});
+
 
   const handleClick = () => setIsCreateNote(true);
   const handleClose = () => setIsCreateNote(false);
