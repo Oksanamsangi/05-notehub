@@ -6,26 +6,26 @@ import SearchBox from '../SearchBox/SearchBox';
 import NoteForm from '../NoteForm/NoteForm';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import {  useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 
 export default function App() {
-  const [query, setQuery] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
-  const [isCreateNote, setIsCreateNote] = useState<boolean>(false);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [isCreateNote, setIsCreateNote] = useState(false);
+
+  const [debouncedQuery] = useDebounce(query, 300);
 
   const updateQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
     setPage(1);
   };
 
-  const [debouncedQuery] = useDebounce(query, 300);
-
-const { data, isSuccess } = useQuery({
-  queryKey: ['notes', debouncedQuery, page],
-  queryFn: () => fetchNotes(debouncedQuery, page),
-});
-
+  const { data, isSuccess } = useQuery({
+    queryKey: ['notes', debouncedQuery, page],
+    queryFn: () => fetchNotes(debouncedQuery, page),
+    placeholderData: previousData => previousData,
+  });
 
   const handleClick = () => setIsCreateNote(true);
   const handleClose = () => setIsCreateNote(false);
@@ -37,7 +37,7 @@ const { data, isSuccess } = useQuery({
         {data?.totalPages && data.totalPages > 1 && (
           <Pagination
             page={page}
-            totalPages={data?.totalPages}
+            totalPages={data.totalPages}
             onPageChange={setPage}
           />
         )}
@@ -45,7 +45,9 @@ const { data, isSuccess } = useQuery({
           Create note +
         </button>
       </header>
+
       {isSuccess && data.notes.length > 0 && <NoteList notes={data.notes} />}
+
       {isCreateNote && (
         <NoteModal onClose={handleClose}>
           <NoteForm onClose={handleClose} />

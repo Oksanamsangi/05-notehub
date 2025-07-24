@@ -1,15 +1,14 @@
-import css from './Modal.module.css'
-import NoteForm from '../NoteForm/NoteForm'
+import css from './Modal.module.css';
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 
 type NoteModalProps = {
   onClose: () => void;
-  children: React.ReactNode; // Ось сюди додай це
+  children: React.ReactNode;
 };
 
-export default function NoteModal({onClose}: NoteModalProps) {
-    const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+export default function NoteModal({ onClose, children }: NoteModalProps) {
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
@@ -22,25 +21,24 @@ export default function NoteModal({onClose}: NoteModalProps) {
       }
     };
 
-    document.addEventListener("keydown", handleEsc);
-    document.body.style.overflow = "hidden";
+    document.addEventListener('keydown', handleEsc);
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = '';
     };
   }, [onClose]);
 
-    return createPortal(<div
-  className={css.backdrop}
-  onClick={handleBackdropClick}
-  role="dialog"
-  aria-modal="true"
->
-  <div className={css.modal}>
-    <NoteForm onClose={onClose}/>
-  </div>
-</div>,
-document.body
-);
+  return createPortal(
+    <div
+      className={css.backdrop}
+      onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className={css.modal}>{children}</div>
+    </div>,
+    document.body
+  );
 }
